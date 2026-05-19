@@ -1,0 +1,103 @@
+{
+  "metadata": {
+    "title": "AgenticFlow",
+    "description": "用于编排复杂 AI 智能体集群与多智能体工作流的开源引擎。"
+  },
+  "common": {
+    "getStarted": "立即开始",
+    "readTheDocs": "阅读文档",
+    "openMenu": "打开菜单"
+  },
+  "auth": {
+    "title": "登录 AgenticFlow",
+    "description": "使用 Google 或 GitHub 账号继续",
+    "google": "使用 Google 继续",
+    "github": "使用 GitHub 继续",
+    "close": "关闭"
+  },
+  "nav": {
+    "features": "功能",
+    "docs": "文档"
+  },
+  "hero": {
+    "title": "规模化编排",
+    "titleMuted": "智能体集群。",
+    "description": "AgenticFlow 是多智能体系统的统一编排层。借助强大的可视化编排引擎，构建、部署并扩展复杂的 AI 工作流。"
+  },
+  "workflow": {
+    "title": "可视化编排你的智能体集群",
+    "description": "通过直观的节点式界面设计复杂的智能体行为，轻松处理分支、循环与并行执行。",
+    "nodes": {
+      "userIntent": "用户意图",
+      "router": "AgenticFlow 路由",
+      "researchAgent": "研究智能体",
+      "sqlAnalyst": "SQL 分析",
+      "executionEngine": "执行引擎"
+    }
+  },
+  "features": {
+    "items": [
+      {
+        "title": "低延迟执行",
+        "description": "基于优化运行时，复杂智能体交互可实现亚秒级响应。"
+      },
+      {
+        "title": "安全护栏",
+        "description": "内置逻辑保障生产环境集群的安全性、可靠性与成本控制。"
+      },
+      {
+        "title": "多智能体记忆",
+        "description": "跨集群持久化状态管理，智能体之间无缝共享上下文。"
+      },
+      {
+        "title": "工具连接器",
+        "description": "开箱即用连接 100+ 工具，从 GitHub、Slack 到自定义 API。"
+      },
+      {
+        "title": "动态扩缩容",
+        "description": "根据负载自动启停智能体，按集群实际需求弹性伸缩。"
+      },
+      {
+        "title": "高级分析",
+        "description": "深度可观测你的集群，监控 Token、延迟与成功率等指标。"
+      }
+    ]
+  },
+  "cta": {
+    "title": "准备好自动化",
+    "titleLine2": "不可能之事？",
+    "description": "AgenticFlow 免费且开源。注册账号、连接 OAuth 提供商，数分钟内即可部署首个智能体集群。"
+  },
+  "footer": {
+    "tagline": "为下一代智能软件构建编排层。",
+    "copyright": "© 2026 AgenticFlow. 开源项目。",
+    "groups": {
+      "project": {
+        "title": "项目",
+        "features": "功能",
+        "documentation": "文档",
+        "github": "GitHub"
+      },
+      "resources": {
+        "title": "资源",
+        "documentation": "文档",
+        "apiReference": "API 参考",
+        "guides": "指南"
+      },
+      "community": {
+        "title": "社区",
+        "about": "关于",
+        "contributing": "参与贡献",
+        "license": "许可证"
+      }
+    },
+    "legal": {
+      "privacy": "隐私",
+      "security": "安全",
+      "contact": "联系"
+    }
+  },
+  "localeSwitcher": {
+    "label": "语言"
+  }
+}

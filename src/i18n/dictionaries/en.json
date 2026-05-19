@@ -1,0 +1,103 @@
+{
+  "metadata": {
+    "title": "AgenticFlow",
+    "description": "An open-source engine for orchestrating complex AI agent swarms and multi-agent workflows."
+  },
+  "common": {
+    "getStarted": "Get Started",
+    "readTheDocs": "Read the Docs",
+    "openMenu": "Open menu"
+  },
+  "auth": {
+    "title": "Sign in to AgenticFlow",
+    "description": "Continue with your Google or GitHub account",
+    "google": "Continue with Google",
+    "github": "Continue with GitHub",
+    "close": "Close"
+  },
+  "nav": {
+    "features": "Features",
+    "docs": "Docs"
+  },
+  "hero": {
+    "title": "Orchestrate Intelligent",
+    "titleMuted": "Agent Swarms at Scale.",
+    "description": "AgenticFlow is the unified orchestration layer for multi-agent systems. Build, deploy, and scale complex AI workflows with a powerful visual-first orchestration engine."
+  },
+  "workflow": {
+    "title": "Visually Orchestrate Your Swarm",
+    "description": "Design complex agent behaviors using our intuitive node-based interface. Handle branching, loops, and parallel execution with ease.",
+    "nodes": {
+      "userIntent": "User Intent",
+      "router": "AgenticFlow Router",
+      "researchAgent": "Research Agent",
+      "sqlAnalyst": "SQL Analyst",
+      "executionEngine": "Execution Engine"
+    }
+  },
+  "features": {
+    "items": [
+      {
+        "title": "Low-Latency Execution",
+        "description": "Sub-second response times for complex agent interactions using our optimized runtime."
+      },
+      {
+        "title": "Safety Guardrails",
+        "description": "Built-in logic to handle safety, reliability, and cost-control for production swarms."
+      },
+      {
+        "title": "Multi-Agent Memory",
+        "description": "Persistent state management across entire swarms. Agents share context seamlessly."
+      },
+      {
+        "title": "Tool Connectors",
+        "description": "Connect to 100+ tools out of the box—from GitHub to Slack and custom APIs."
+      },
+      {
+        "title": "Dynamic Scaling",
+        "description": "Automatically spin up agents based on workload. Scale up or down as your swarm needs."
+      },
+      {
+        "title": "Advanced Analytics",
+        "description": "Deep observability into your swarm. Monitor tokens, latency, and success rates."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Ready to automate",
+    "titleLine2": "the impossible?",
+    "description": "AgenticFlow is free and open source. Sign up, connect your OAuth provider, and deploy your first agent swarm in minutes."
+  },
+  "footer": {
+    "tagline": "Building the orchestration layer for the next generation of intelligent software.",
+    "copyright": "© 2026 AgenticFlow. Open source project.",
+    "groups": {
+      "project": {
+        "title": "Project",
+        "features": "Features",
+        "documentation": "Documentation",
+        "github": "GitHub"
+      },
+      "resources": {
+        "title": "Resources",
+        "documentation": "Documentation",
+        "apiReference": "API Reference",
+        "guides": "Guides"
+      },
+      "community": {
+        "title": "Community",
+        "about": "About",
+        "contributing": "Contributing",
+        "license": "License"
+      }
+    },
+    "legal": {
+      "privacy": "Privacy",
+      "security": "Security",
+      "contact": "Contact"
+    }
+  },
+  "localeSwitcher": {
+    "label": "Language"
+  }
+}
