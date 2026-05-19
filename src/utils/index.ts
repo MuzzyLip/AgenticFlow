@@ -11,3 +11,13 @@ export {
   workflowPaths,
   featureVisuals,
 } from "./landing";
+export {
+  studioRoutes,
+  workspaceNavItems,
+  workspaceAgents,
+  exploreTemplates,
+  exploreCategories,
+  knowledgeDatasets,
+  studioPlugins,
+  canvasNodes,
+} from "./studio";

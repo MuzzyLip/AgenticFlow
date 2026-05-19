@@ -5,3 +5,14 @@ export type {
   WorkflowPath,
   FeatureItem,
 } from "./landing";
+
+export type {
+  WorkspaceTabId,
+  AgentStatus,
+  AgentType,
+  WorkspaceAgent,
+  ExploreTemplateConfig,
+  KnowledgeDataset,
+  StudioPluginConfig,
+  CanvasNode,
+} from "./studio";

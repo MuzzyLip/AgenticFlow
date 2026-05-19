@@ -1,6 +1,11 @@
-"use client";
+﻿"use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useSyncExternalStore,
+  type ReactNode,
+} from "react";
 import { createPortal } from "react-dom";
 import { signIn } from "next-auth/react";
 import { X } from "lucide-react";
@@ -17,18 +22,18 @@ interface LoginModalProps {
 }
 
 export function LoginModal({ open, onClose }: LoginModalProps) {
-  const { t, locale } = useI18n();
+  const { t } = useI18n();
   const panelRef = useRef<HTMLDivElement>(null);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => undefined,
+    () => true,
+    () => false,
+  );
 
   useDismissable(panelRef, {
     enabled: open,
     onDismiss: onClose,
   });
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -41,7 +46,7 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
   }, [open]);
 
   const handleOAuthSignIn = (provider: OAuthProvider) => {
-    void signIn(provider, { callbackUrl: `/${locale}` });
+    void signIn(provider);
   };
 
   if (!open || !mounted) {
@@ -68,7 +73,10 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
           >
             {t.auth.title}
           </h2>
-          <p id="login-modal-description" className="mb-8 text-sm text-gray-500">
+          <p
+            id="login-modal-description"
+            className="mb-8 text-sm text-gray-500"
+          >
             {t.auth.description}
           </p>
 
@@ -164,3 +172,4 @@ function OAuthButton({ label, icon, onClick }: OAuthButtonProps) {
     </button>
   );
 }
+

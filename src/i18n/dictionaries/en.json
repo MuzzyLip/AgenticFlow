@@ -99,5 +99,203 @@
   },
   "localeSwitcher": {
     "label": "Language"
+  },
+  "studio": {
+    "workspaceSwitcher": {
+      "name": "Nexus Studio",
+      "tier": "Personal"
+    },
+    "nav": {
+      "explore": "Explore",
+      "workspace": "Workspace",
+      "datasets": "Datasets",
+      "plugins": "Plugins"
+    },
+    "profile": {
+      "displayName": "muzzy...907683",
+      "email": "muzzylip@gmail.com",
+      "userId": "ID: user1911907683",
+      "profile": "Profile",
+      "account": "Account",
+      "contactUs": "Contact Us",
+      "logOut": "Log out"
+    },
+    "explore": {
+      "title": "Explore Templates",
+      "searchPlaceholder": "Search templates, agents...",
+      "featuredTrending": {
+        "title": "Most Popular Swarms",
+        "description": "Discover what the community is building with multi-agent orchestration.",
+        "cta": "View Trending"
+      },
+      "featuredRecent": {
+        "title": "Recently Added",
+        "description": "Stay updated with the latest agent capabilities and plugins.",
+        "cta": "New Arrivals"
+      },
+      "starterTemplates": "Starter Templates",
+      "viewAll": "View All",
+      "useTemplate": "Use Template",
+      "categories": {
+        "all": "All",
+        "marketing": "Marketing",
+        "support": "Customer Support",
+        "engineering": "Engineering",
+        "personal": "Personal",
+        "data": "Data"
+      },
+      "groups": {
+        "marketing": "Marketing",
+        "support": "Support",
+        "engineering": "Engineering",
+        "personal": "Personal",
+        "data": "Data"
+      },
+      "templates": {
+        "seoStrategist": {
+          "name": "SEO Content Strategist",
+          "description": "Analyzes search trends and generates high-ranking content briefs."
+        },
+        "csResponse": {
+          "name": "Automated CS Response",
+          "description": "Routes tickets and suggests resolutions based on past data."
+        },
+        "prReview": {
+          "name": "PR Review Assistant",
+          "description": "Standardizes pull request reviews for style and common bugs."
+        },
+        "travelPlanner": {
+          "name": "Travel Planner Pro",
+          "description": "Orchestrates flights, hotels, and itinerary based on preferences."
+        },
+        "sqlGenerator": {
+          "name": "SQL Query Generator",
+          "description": "Translates natural language to complex SQL optimized for BigQuery."
+        },
+        "emailOutreach": {
+          "name": "Email Outreach Swarm",
+          "description": "Sends personalized emails and handles automated follow-ups."
+        }
+      }
+    },
+    "workspaceList": {
+      "title": "My Workspace",
+      "description": "Build and manage your agents and multi-agent workflows.",
+      "filterPlaceholder": "Filter agents...",
+      "createNew": "Create New",
+      "executions": "Executions",
+      "applications": "Applications",
+      "updated": "Updated",
+      "tableName": "Name",
+      "tableStatus": "Status",
+      "tableType": "Type",
+      "tableUsage": "Usage",
+      "emptyTitle": "No agents found",
+      "emptyDescription": "Start your first swarm by selecting a template or building from scratch.",
+      "createAgent": "Create Agent",
+      "status": {
+        "live": "live",
+        "paused": "paused"
+      }
+    },
+    "knowledge": {
+      "title": "Knowledge Base",
+      "description": "Manage the documents and data your agents use for retrieval (RAG).",
+      "uploadFile": "Upload File",
+      "newCollection": "New Collection",
+      "features": {
+        "vectorSearch": {
+          "title": "Vector Search",
+          "description": "Semantic indexing for intelligent retrieval."
+        },
+        "graphMemory": {
+          "title": "Graph Memory",
+          "description": "LTS persistent relationships between agents."
+        },
+        "coldStorage": {
+          "title": "Cold Storage",
+          "description": "Archive large datasets for periodic runs."
+        },
+        "accessControl": {
+          "title": "Access Control",
+          "description": "Secure data partitioning at the swarm level."
+        }
+      },
+      "activeCollections": "Active Collections",
+      "searchCollections": "Search collections...",
+      "table": {
+        "name": "Collection Name",
+        "format": "Format",
+        "size": "Size",
+        "chunks": "Chunks",
+        "status": "Status"
+      },
+      "status": {
+        "synced": "synced",
+        "processing": "processing"
+      }
+    },
+    "plugins": {
+      "title": "Plugin Marketplace",
+      "description": "Extend your agents with powerful tools and native integrations.",
+      "searchPlaceholder": "Explore plugins...",
+      "active": "Active",
+      "install": "Install",
+      "configuration": "Configuration",
+      "documentation": "Documentation",
+      "buildOwn": {
+        "title": "Build your own plugin",
+        "description": "Access our SDK to build custom tools and integrations for your private swarm or the public marketplace.",
+        "cta": "Access Developer Portal"
+      },
+      "providers": {
+        "official": "Official",
+        "nexus": "Nexus",
+        "community": "Community"
+      },
+      "descriptions": {
+        "googleSearch": "Allow agents to search the web in real-time.",
+        "githubSync": "Read/write access to repositories and issues.",
+        "slackBot": "Deploy agents as interactive Slack apps.",
+        "stripePayments": "Handle transactions and check subscription status.",
+        "postmarkEmail": "Transactional email automation for agents.",
+        "cronScheduler": "Schedule agent runs at specific intervals.",
+        "vercelDeploy": "Automate deployments based on agent output.",
+        "wolframAlpha": "Advanced mathematical and scientific computation."
+      }
+    },
+    "editor": {
+      "agentName": "Customer Support Swarm",
+      "live": "Live",
+      "editedAgo": "Edited 2m ago",
+      "history": "History",
+      "collaborate": "Collaborate",
+      "saveDraft": "Save Draft",
+      "runFlow": "Run Flow",
+      "testSwarm": "Test Swarm",
+      "simulator": "Simulator",
+      "simulatorSubtitle": "Customer Support Swarm",
+      "chatEmpty": "Send a message to start simulating your swarm",
+      "chatPlaceholder": "Type a message...",
+      "inspector": {
+        "title": "Node Configuration",
+        "nodeName": "Router Agent",
+        "nodeId": "id: agent_8321",
+        "model": "Model",
+        "modelValue": "Gemini 1.5 Pro",
+        "systemPrompt": "System Prompt",
+        "variableEditor": "Variable Editor",
+        "promptPlaceholder": "Introduce yourself as the Router Agent...",
+        "promptDefault": "You are the Nexus Router. Your job is to analyze user intent and route the request to either the Research Agent or the SQL Analyst based on whether it requires web scraping or database querying.",
+        "parameters": "Parameters",
+        "temperature": "Temperature",
+        "addToolDependency": "Add Tool Dependency",
+        "exportJson": "Export as JSON",
+        "nodeDescription": "Processes incoming messages"
+      },
+      "canvas": {
+        "zoom": "100%"
+      }
+    }
   }
 }

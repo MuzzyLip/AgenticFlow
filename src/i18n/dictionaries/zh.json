@@ -99,5 +99,203 @@
   },
   "localeSwitcher": {
     "label": "语言"
+  },
+  "studio": {
+    "workspaceSwitcher": {
+      "name": "Nexus Studio",
+      "tier": "个人版"
+    },
+    "nav": {
+      "explore": "探索",
+      "workspace": "工作区",
+      "datasets": "数据集",
+      "plugins": "插件"
+    },
+    "profile": {
+      "displayName": "muzzy...907683",
+      "email": "muzzylip@gmail.com",
+      "userId": "ID: user1911907683",
+      "profile": "个人资料",
+      "account": "账户",
+      "contactUs": "联系我们",
+      "logOut": "退出登录"
+    },
+    "explore": {
+      "title": "探索模板",
+      "searchPlaceholder": "搜索模板、智能体...",
+      "featuredTrending": {
+        "title": "热门智能体集群",
+        "description": "发现社区如何使用多智能体编排构建应用。",
+        "cta": "查看趋势"
+      },
+      "featuredRecent": {
+        "title": "最近新增",
+        "description": "及时了解最新的智能体能力与插件。",
+        "cta": "新品上架"
+      },
+      "starterTemplates": "入门模板",
+      "viewAll": "查看全部",
+      "useTemplate": "使用模板",
+      "categories": {
+        "all": "全部",
+        "marketing": "营销",
+        "support": "客户支持",
+        "engineering": "工程",
+        "personal": "个人",
+        "data": "数据"
+      },
+      "groups": {
+        "marketing": "营销",
+        "support": "支持",
+        "engineering": "工程",
+        "personal": "个人",
+        "data": "数据"
+      },
+      "templates": {
+        "seoStrategist": {
+          "name": "SEO 内容策略师",
+          "description": "分析搜索趋势并生成高排名内容简报。"
+        },
+        "csResponse": {
+          "name": "自动化客服回复",
+          "description": "根据历史数据路由工单并建议解决方案。"
+        },
+        "prReview": {
+          "name": "PR 审查助手",
+          "description": "标准化 Pull Request 的代码风格与常见错误审查。"
+        },
+        "travelPlanner": {
+          "name": "旅行规划专家",
+          "description": "根据偏好编排航班、酒店与行程。"
+        },
+        "sqlGenerator": {
+          "name": "SQL 查询生成器",
+          "description": "将自然语言翻译为针对 BigQuery 优化的复杂 SQL。"
+        },
+        "emailOutreach": {
+          "name": "邮件外展集群",
+          "description": "发送个性化邮件并处理自动跟进。"
+        }
+      }
+    },
+    "workspaceList": {
+      "title": "我的工作区",
+      "description": "构建并管理你的智能体与多智能体工作流。",
+      "filterPlaceholder": "筛选智能体...",
+      "createNew": "新建",
+      "executions": "执行次数",
+      "applications": "应用数",
+      "updated": "更新时间",
+      "tableName": "名称",
+      "tableStatus": "状态",
+      "tableType": "类型",
+      "tableUsage": "用量",
+      "emptyTitle": "未找到智能体",
+      "emptyDescription": "选择模板或从零开始，创建你的第一个智能体集群。",
+      "createAgent": "创建智能体",
+      "status": {
+        "live": "运行中",
+        "paused": "已暂停"
+      }
+    },
+    "knowledge": {
+      "title": "知识库",
+      "description": "管理智能体用于检索（RAG）的文档与数据。",
+      "uploadFile": "上传文件",
+      "newCollection": "新建集合",
+      "features": {
+        "vectorSearch": {
+          "title": "向量搜索",
+          "description": "语义索引，实现智能检索。"
+        },
+        "graphMemory": {
+          "title": "图记忆",
+          "description": "智能体之间的长期持久关系。"
+        },
+        "coldStorage": {
+          "title": "冷存储",
+          "description": "归档大型数据集以供周期性运行。"
+        },
+        "accessControl": {
+          "title": "访问控制",
+          "description": "在集群级别安全划分数据。"
+        }
+      },
+      "activeCollections": "活跃集合",
+      "searchCollections": "搜索集合...",
+      "table": {
+        "name": "集合名称",
+        "format": "格式",
+        "size": "大小",
+        "chunks": "分块",
+        "status": "状态"
+      },
+      "status": {
+        "synced": "已同步",
+        "processing": "处理中"
+      }
+    },
+    "plugins": {
+      "title": "插件市场",
+      "description": "用强大的工具与原生集成扩展你的智能体。",
+      "searchPlaceholder": "探索插件...",
+      "active": "已启用",
+      "install": "安装",
+      "configuration": "配置",
+      "documentation": "文档",
+      "buildOwn": {
+        "title": "构建你自己的插件",
+        "description": "使用 SDK 为私有集群或公开市场构建自定义工具与集成。",
+        "cta": "进入开发者门户"
+      },
+      "providers": {
+        "official": "官方",
+        "nexus": "Nexus",
+        "community": "社区"
+      },
+      "descriptions": {
+        "googleSearch": "让智能体实时搜索网络。",
+        "githubSync": "读写仓库与 Issue。",
+        "slackBot": "将智能体部署为交互式 Slack 应用。",
+        "stripePayments": "处理交易并检查订阅状态。",
+        "postmarkEmail": "智能体的事务性邮件自动化。",
+        "cronScheduler": "按指定间隔调度智能体运行。",
+        "vercelDeploy": "根据智能体输出自动部署。",
+        "wolframAlpha": "高级数学与科学计算。"
+      }
+    },
+    "editor": {
+      "agentName": "客户支持集群",
+      "live": "运行中",
+      "editedAgo": "2 分钟前编辑",
+      "history": "历史",
+      "collaborate": "协作",
+      "saveDraft": "保存草稿",
+      "runFlow": "运行流程",
+      "testSwarm": "测试集群",
+      "simulator": "模拟器",
+      "simulatorSubtitle": "客户支持集群",
+      "chatEmpty": "发送消息以开始模拟你的智能体集群",
+      "chatPlaceholder": "输入消息...",
+      "inspector": {
+        "title": "节点配置",
+        "nodeName": "路由智能体",
+        "nodeId": "id: agent_8321",
+        "model": "模型",
+        "modelValue": "Gemini 1.5 Pro",
+        "systemPrompt": "系统提示词",
+        "variableEditor": "变量编辑器",
+        "promptPlaceholder": "以路由智能体身份自我介绍...",
+        "promptDefault": "你是 Nexus 路由器。你的职责是分析用户意图，并根据是否需要网页抓取或数据库查询，将请求路由到研究智能体或 SQL 分析师。",
+        "parameters": "参数",
+        "temperature": "温度",
+        "addToolDependency": "添加工具依赖",
+        "exportJson": "导出为 JSON",
+        "nodeDescription": "处理传入消息"
+      },
+      "canvas": {
+        "zoom": "100%"
+      }
+    }
   }
 }
