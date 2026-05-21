@@ -1,4 +1,10 @@
 export type {
+  AuthSession,
+  AuthStatus,
+  AuthUser,
+} from "./auth";
+
+export type {
   NavLink,
   FooterLinkGroup,
   WorkflowNode,

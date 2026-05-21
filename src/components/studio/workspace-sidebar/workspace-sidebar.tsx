@@ -14,9 +14,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
 import { useState } from "react";
 
+import { useAuthSession } from "@/contexts/auth-session-provider";
 import { useI18n, useMotionTransition } from "@/hooks";
 import { appRoutes, workspaceNavItems } from "@/utils";
 import { cn } from "@/utils/cn";
@@ -24,11 +24,13 @@ import { getActiveStudioTab, studioTabPath } from "@/utils/studio";
 
 export function WorkspaceSidebar() {
   const { t, lp } = useI18n();
+  const { session, signOut } = useAuthSession();
   const pathname = usePathname();
   const router = useRouter();
   const activeTab = getActiveStudioTab(pathname);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const menuTransition = useMotionTransition({ duration: 0.2 });
+  const user = session?.user;
 
   const navLabels = {
     explore: t.studio.nav.explore,
@@ -43,7 +45,8 @@ export function WorkspaceSidebar() {
   };
 
   const handleSignOut = () => {
-    void signOut({ callbackUrl: lp(appRoutes.home) });
+    setIsProfileOpen(false);
+    void signOut(lp(appRoutes.home));
   };
 
   return (
@@ -115,7 +118,7 @@ export function WorkspaceSidebar() {
                 <User className="h-4.5 w-4.5 text-indigo-600" />
               </div>
               <p className="truncate text-xs font-bold text-gray-700">
-                {t.studio.profile.displayName}
+                {user?.name ?? t.studio.profile.displayName}
               </p>
             </button>
 
@@ -141,10 +144,10 @@ export function WorkspaceSidebar() {
                       </div>
                       <div className="min-w-0">
                         <p className="truncate text-sm font-bold text-gray-900">
-                          {t.studio.profile.email}
+                          {user?.email ?? t.studio.profile.email}
                         </p>
                         <p className="text-[10px] font-bold tracking-tight text-gray-400">
-                          {t.studio.profile.userId}
+                          {user?.id ?? t.studio.profile.userId}
                         </p>
                       </div>
                     </div>

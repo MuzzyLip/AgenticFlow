@@ -1,4 +1,19 @@
 export { cn } from "./cn";
+export {
+  getAuthSession,
+  signInWithOAuth,
+  signOutWithSession,
+  type OAuthProvider,
+} from "./auth";
+export {
+  HttpError,
+  httpClient,
+  httpDelete,
+  httpGet,
+  httpPatch,
+  httpPost,
+  httpPut,
+} from "./http";
 export { localizedPath } from "./i18n";
 export {
   siteConfig,
