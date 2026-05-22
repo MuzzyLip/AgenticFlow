@@ -4,7 +4,7 @@ import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Check, Languages } from "lucide-react";
 
-import { Popover } from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useI18n } from "@/hooks";
 import { localeLabels, locales, type Locale } from "@/i18n";
 import { cn } from "@/utils";
@@ -42,11 +42,8 @@ export function LocaleSwitcher() {
   };
 
   return (
-    <Popover
-      open={open}
-      onOpenChange={setOpen}
-      align="end"
-      trigger={
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
         <button
           type="button"
           aria-label={t.localeSwitcher.label}
@@ -54,28 +51,29 @@ export function LocaleSwitcher() {
         >
           <Languages className="h-5 w-5" />
         </button>
-      }
-    >
-      {locales.map((l) => (
-        <button
-          key={l}
-          type="button"
-          role="menuitemradio"
-          aria-checked={locale === l}
-          onClick={() => {
-            switchLocale(l);
-          }}
-          className={cn(
-            "flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors",
-            locale === l
-              ? "bg-gray-100 font-medium text-gray-950"
-              : "text-gray-600 hover:bg-gray-50 hover:text-black",
-          )}
-        >
-          <span>{localeLabels[l]}</span>
-          {locale === l ? <Check className="h-4 w-4 shrink-0" /> : null}
-        </button>
-      ))}
+      </PopoverTrigger>
+      <PopoverContent align="end" className="w-auto min-w-36 p-1">
+        {locales.map((l) => (
+          <button
+            key={l}
+            type="button"
+            role="menuitemradio"
+            aria-checked={locale === l}
+            onClick={() => {
+              switchLocale(l);
+            }}
+            className={cn(
+              "flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors",
+              locale === l
+                ? "bg-gray-100 font-medium text-gray-950"
+                : "text-gray-600 hover:bg-gray-50 hover:text-black",
+            )}
+          >
+            <span>{localeLabels[l]}</span>
+            {locale === l ? <Check className="h-4 w-4 shrink-0" /> : null}
+          </button>
+        ))}
+      </PopoverContent>
     </Popover>
   );
 }

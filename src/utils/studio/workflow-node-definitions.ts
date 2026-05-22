@@ -1,4 +1,9 @@
-import type { WorkflowNodeDefinition, WorkflowPortDefinition } from "@/types";
+import type {
+  WorkflowNodeDefinition,
+  WorkflowNodeInputDefinition,
+  WorkflowNodeOutputDefinition,
+  WorkflowPortDefinition,
+} from "@/types";
 
 const START_PORTS = [
   {
@@ -10,6 +15,18 @@ const START_PORTS = [
     required: true,
   },
 ] as const satisfies readonly WorkflowPortDefinition[];
+
+function deriveStartOutputsFromInputs(
+  inputs: readonly WorkflowNodeInputDefinition[],
+): readonly WorkflowNodeOutputDefinition[] {
+  return inputs.map((input) => ({
+    id: input.id,
+    label: input.label,
+    valueType: input.valueType,
+    description: input.description,
+    schema: input.schema,
+  }));
+}
 
 const LLM_CALL_PORTS = [
   {
@@ -68,6 +85,65 @@ const END_PORTS = [
   },
 ] as const satisfies readonly WorkflowPortDefinition[];
 
+const START_INPUTS = [] as const satisfies readonly WorkflowNodeInputDefinition[];
+
+const START_OUTPUTS = deriveStartOutputsFromInputs(START_INPUTS);
+
+const LLM_CALL_INPUTS = [
+  {
+    id: "user_message",
+    label: "User Message",
+    valueType: "text",
+    required: true,
+    description: "Message content passed into the LLM prompt.",
+  },
+  {
+    id: "system_prompt",
+    label: "System Prompt",
+    valueType: "text",
+    required: false,
+    description: "Optional runtime system prompt override.",
+  },
+] as const satisfies readonly WorkflowNodeInputDefinition[];
+
+const LLM_CALL_OUTPUTS = [
+  {
+    id: "response_text",
+    label: "Response Text",
+    valueType: "text",
+    description: "Model response text.",
+  },
+] as const satisfies readonly WorkflowNodeOutputDefinition[];
+
+const CONDITION_INPUTS = [
+  {
+    id: "subject",
+    label: "Subject",
+    valueType: "any",
+    required: true,
+    description: "Input value used in expression evaluation.",
+  },
+] as const satisfies readonly WorkflowNodeInputDefinition[];
+
+const CONDITION_OUTPUTS = [
+  {
+    id: "matched",
+    label: "Matched",
+    valueType: "boolean",
+    description: "Expression evaluation result.",
+  },
+] as const satisfies readonly WorkflowNodeOutputDefinition[];
+
+const END_INPUTS = [
+  {
+    id: "result",
+    label: "Result",
+    valueType: "any",
+    required: false,
+    description: "Optional final payload for terminal node.",
+  },
+] as const satisfies readonly WorkflowNodeInputDefinition[];
+
 export const BASE_WORKFLOW_NODE_DEFINITIONS = [
   {
     type: "start",
@@ -82,6 +158,8 @@ export const BASE_WORKFLOW_NODE_DEFINITIONS = [
     },
     defaultConfig: {},
     ports: START_PORTS,
+    inputs: START_INPUTS,
+    outputs: START_OUTPUTS,
     uiMeta: {
       icon: "message",
       color: "bg-blue-500",
@@ -108,6 +186,8 @@ export const BASE_WORKFLOW_NODE_DEFINITIONS = [
       model: "gpt-4.1-mini",
     },
     ports: LLM_CALL_PORTS,
+    inputs: LLM_CALL_INPUTS,
+    outputs: LLM_CALL_OUTPUTS,
     uiMeta: {
       icon: "bot",
       color: "bg-black",
@@ -134,6 +214,8 @@ export const BASE_WORKFLOW_NODE_DEFINITIONS = [
       expression: "",
     },
     ports: CONDITION_PORTS,
+    inputs: CONDITION_INPUTS,
+    outputs: CONDITION_OUTPUTS,
     uiMeta: {
       icon: "globe",
       color: "bg-emerald-500",
@@ -153,6 +235,7 @@ export const BASE_WORKFLOW_NODE_DEFINITIONS = [
     },
     defaultConfig: {},
     ports: END_PORTS,
+    inputs: END_INPUTS,
     uiMeta: {
       icon: "cpu",
       color: "bg-indigo-500",

@@ -1,10 +1,20 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Bot, Cpu, Database, Globe, MessageSquare, Plus, Shapes } from "lucide-react";
+import {
+  Bot,
+  BoxSelect,
+  Cpu,
+  Database,
+  Globe,
+  Hand,
+  MessageSquare,
+  Plus,
+  Shapes,
+} from "lucide-react";
 import { Panel } from "@xyflow/react";
 
-import { Popover } from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import type { WorkflowNodeDefinition, WorkflowNodeIcon } from "@/types";
 import { cn } from "@/utils/cn";
 
@@ -23,9 +33,17 @@ interface NodePaletteProps {
   definitions: readonly WorkflowNodeDefinition[];
   onDragStart: (event: React.DragEvent<HTMLButtonElement>, nodeType: string) => void;
   onSelectNodeType: (nodeType: string) => void;
+  interactionMode: "pan" | "select";
+  onInteractionModeChange: (mode: "pan" | "select") => void;
 }
 
-export function NodePalette({ definitions, onDragStart, onSelectNodeType }: NodePaletteProps) {
+export function NodePalette({
+  definitions,
+  onDragStart,
+  onSelectNodeType,
+  interactionMode,
+  onInteractionModeChange,
+}: NodePaletteProps) {
   const [open, setOpen] = useState(false);
 
   const groupedDefinitions = useMemo(() => {
@@ -49,11 +67,39 @@ export function NodePalette({ definitions, onDragStart, onSelectNodeType }: Node
   return (
     <Panel position="top-left" className="m-4">
       <div className="flex flex-col gap-2">
-        <Popover
-          open={open}
-          onOpenChange={setOpen}
-          align="start"
-          trigger={
+        <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white p-1 shadow-sm">
+          <button
+            type="button"
+            aria-label="Drag canvas mode"
+            aria-pressed={interactionMode === "pan"}
+            onClick={() => onInteractionModeChange("pan")}
+            className={cn(
+              "flex h-8 w-8 items-center justify-center rounded-lg transition-colors",
+              interactionMode === "pan"
+                ? "bg-gray-900 text-white"
+                : "text-gray-500 hover:bg-gray-100 hover:text-gray-900",
+            )}
+          >
+            <Hand className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            aria-label="Box selection mode"
+            aria-pressed={interactionMode === "select"}
+            onClick={() => onInteractionModeChange("select")}
+            className={cn(
+              "flex h-8 w-8 items-center justify-center rounded-lg transition-colors",
+              interactionMode === "select"
+                ? "bg-gray-900 text-white"
+                : "text-gray-500 hover:bg-gray-100 hover:text-gray-900",
+            )}
+          >
+            <BoxSelect className="h-4 w-4" />
+          </button>
+        </div>
+
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
             <button
               type="button"
               aria-label="Open node palette"
@@ -64,9 +110,8 @@ export function NodePalette({ definitions, onDragStart, onSelectNodeType }: Node
             >
               <Plus className="h-5 w-5" />
             </button>
-          }
-        >
-          <div className="w-80">
+          </PopoverTrigger>
+          <PopoverContent align="start" className="w-80 p-0">
             <div className="border-b border-gray-100 px-3 py-2">
               <div className="flex items-center gap-2">
                 <Shapes className="h-4 w-4 text-gray-500" />
@@ -121,7 +166,7 @@ export function NodePalette({ definitions, onDragStart, onSelectNodeType }: Node
                 </section>
               ))}
             </div>
-          </div>
+          </PopoverContent>
         </Popover>
       </div>
     </Panel>

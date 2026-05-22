@@ -1,6 +1,7 @@
 import type {
   WorkflowNodeConfig,
   WorkflowNodeDefinition,
+  WorkflowNodeInputBindings,
   WorkflowNodeInstance,
   WorkflowPosition,
 } from "@/types";
@@ -17,6 +18,7 @@ export interface CreateWorkflowNodeInstanceOptions<
   label: string;
   position: WorkflowPosition;
   config?: Partial<TConfig>;
+  inputBindings?: WorkflowNodeInputBindings;
 }
 
 export function buildWorkflowNodeDefinitionKey(
@@ -98,6 +100,9 @@ export class StaticWorkflowNodeRegistry {
         ...(options.config ?? {}),
       },
       ports: definition.ports.map((port) => ({ ...port })),
+      inputs: definition.inputs?.map((input) => ({ ...input })),
+      outputs: definition.outputs?.map((output) => ({ ...output })),
+      inputBindings: { ...(options.inputBindings ?? {}) },
     };
   }
 }

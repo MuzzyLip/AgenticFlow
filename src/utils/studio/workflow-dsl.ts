@@ -44,6 +44,12 @@ export function createMockWorkflowDocument(): WorkflowDocument {
       label: "Router Agent",
       position: { x: 300, y: 150 },
       config: { model: "gpt-4.1-mini" },
+      inputBindings: {
+        user_message: {
+          source: "const",
+          value: "Hello from mock data",
+        },
+      },
     }),
     workflowNodeRegistry.createNodeInstance({
       id: "node_condition",
@@ -51,18 +57,45 @@ export function createMockWorkflowDocument(): WorkflowDocument {
       label: "Need External Search?",
       position: { x: 500, y: 150 },
       config: { expression: "intent in ['faq', 'realtime']" },
+      inputBindings: {
+        subject: {
+          source: "ref",
+          value: {
+            nodeId: "node_llm",
+            outputId: "response_text",
+          },
+        },
+      },
     }),
     workflowNodeRegistry.createNodeInstance({
       id: "node_end_search",
       type: "end",
       label: "Search Branch",
       position: { x: 800, y: 100 },
+      inputBindings: {
+        result: {
+          source: "ref",
+          value: {
+            nodeId: "node_llm",
+            outputId: "response_text",
+          },
+        },
+      },
     }),
     workflowNodeRegistry.createNodeInstance({
       id: "node_end_reply",
       type: "end",
       label: "Reply Directly",
       position: { x: 800, y: 200 },
+      inputBindings: {
+        result: {
+          source: "ref",
+          value: {
+            nodeId: "node_llm",
+            outputId: "response_text",
+          },
+        },
+      },
     }),
   ];
 
@@ -72,24 +105,43 @@ export function createMockWorkflowDocument(): WorkflowDocument {
       type: "control",
       source: { nodeId: "node_start", portId: "out" },
       target: { nodeId: "node_llm", portId: "in" },
+      branch: {
+        kind: "default",
+      },
     },
     {
       id: "edge_llm_condition",
       type: "control",
       source: { nodeId: "node_llm", portId: "out" },
       target: { nodeId: "node_condition", portId: "in" },
+      branch: {
+        kind: "default",
+      },
     },
     {
       id: "edge_condition_true",
       type: "control",
       source: { nodeId: "node_condition", portId: "true" },
       target: { nodeId: "node_end_search", portId: "in" },
+      branch: {
+        kind: "condition",
+        label: "Matched",
+        condition: {
+          expression: "conditionResult === true",
+          expected: true,
+        },
+      },
     },
     {
       id: "edge_condition_false",
       type: "control",
       source: { nodeId: "node_condition", portId: "false" },
       target: { nodeId: "node_end_reply", portId: "in" },
+      branch: {
+        kind: "default",
+        label: "Fallback",
+        isFallback: true,
+      },
     },
   ];
 

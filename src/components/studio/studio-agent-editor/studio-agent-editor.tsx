@@ -3,13 +3,24 @@
 import { AnimatePresence } from "motion/react";
 import { MessageSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import { SimulatorChatPanel } from "@/components/studio/simulator-chat-panel";
 import { WorkspaceCanvas } from "@/components/studio/workspace-canvas";
+import type {
+  SelectedWorkflowNode,
+  WorkspaceCanvasRef,
+} from "@/components/studio/workspace-canvas";
 import { WorkspaceHeader } from "@/components/studio/workspace-header";
 import { WorkspaceInspector } from "@/components/studio/workspace-inspector";
 import { useI18n } from "@/hooks";
+import type {
+  WorkflowInputBinding,
+  WorkflowNodeConfig,
+  WorkflowNodeInputDefinition,
+  WorkflowNodeOutputDefinition,
+  WorkflowStartInputDefinitionDraft,
+} from "@/types";
 import { studioRoutes } from "@/utils/studio";
 
 interface StudioAgentEditorProps {
@@ -21,6 +32,68 @@ export function StudioAgentEditor({ agentId }: StudioAgentEditorProps) {
   const router = useRouter();
   const editor = t.studio.editor;
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [selectedNode, setSelectedNode] = useState<SelectedWorkflowNode | null>(
+    null,
+  );
+  const canvasRef = useRef<WorkspaceCanvasRef | null>(null);
+
+  const handleNodeConfigChange = useCallback(
+    (nodeId: string, patch: Partial<WorkflowNodeConfig>) => {
+      canvasRef.current?.updateNodeConfig(nodeId, patch);
+    },
+    [],
+  );
+
+  const handleNodeLabelChange = useCallback((nodeId: string, label: string) => {
+    canvasRef.current?.updateNodeLabel(nodeId, label);
+  }, []);
+
+  const handleNodeInputBindingChange = useCallback(
+    (nodeId: string, inputId: string, binding: WorkflowInputBinding | null) => {
+      canvasRef.current?.updateNodeInputBinding(nodeId, inputId, binding);
+    },
+    [],
+  );
+
+  const handleNodeInputDefinitionChange = useCallback(
+    (
+      nodeId: string,
+      inputId: string,
+      nextDefinition: WorkflowNodeInputDefinition,
+    ) => {
+      canvasRef.current?.updateNodeInputDefinition(nodeId, inputId, nextDefinition);
+    },
+    [],
+  );
+
+  const handleNodeOutputDefinitionChange = useCallback(
+    (
+      nodeId: string,
+      outputId: string,
+      nextDefinition: WorkflowNodeOutputDefinition,
+    ) => {
+      canvasRef.current?.updateNodeOutputDefinition(nodeId, outputId, nextDefinition);
+    },
+    [],
+  );
+
+  const handleNodeInputDefinitionAdd = useCallback(
+    (nodeId: string, draft?: WorkflowStartInputDefinitionDraft) => {
+      canvasRef.current?.addNodeInputDefinition(nodeId, draft);
+    },
+    [],
+  );
+
+  const handleNodeInputDefinitionRemove = useCallback(
+    (nodeId: string, inputId: string) => {
+      canvasRef.current?.removeNodeInputDefinition(nodeId, inputId);
+    },
+    [],
+  );
+
+  const handleInspectNode = useCallback((nodeId: string) => {
+    canvasRef.current?.inspectNode(nodeId);
+  }, []);
 
   return (
     <div
@@ -29,8 +102,21 @@ export function StudioAgentEditor({ agentId }: StudioAgentEditorProps) {
     >
       <WorkspaceHeader onBack={() => router.push(lp(studioRoutes.workspace))} />
       <div className="relative flex min-h-0 flex-1">
-        <WorkspaceCanvas />
-        <WorkspaceInspector />
+        <WorkspaceCanvas
+          ref={canvasRef}
+          onSelectedNodeChange={setSelectedNode}
+        />
+        <WorkspaceInspector
+          selectedNode={selectedNode}
+          onInspectNode={handleInspectNode}
+          onNodeConfigChange={handleNodeConfigChange}
+          onNodeLabelChange={handleNodeLabelChange}
+          onNodeInputBindingChange={handleNodeInputBindingChange}
+          onNodeInputDefinitionChange={handleNodeInputDefinitionChange}
+          onNodeOutputDefinitionChange={handleNodeOutputDefinitionChange}
+          onNodeInputDefinitionAdd={handleNodeInputDefinitionAdd}
+          onNodeInputDefinitionRemove={handleNodeInputDefinitionRemove}
+        />
 
         <div className="absolute right-80 bottom-6 z-20 mr-6">
           <button

@@ -47,3 +47,25 @@
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
+
+.rf-node-placement .react-flow__pane,
+.rf-node-placement .react-flow__zoompane {
+  cursor: cell !important;
+}
+
+.rf-mode-pan .react-flow__pane,
+.rf-mode-pan .react-flow__zoompane {
+  cursor: grab !important;
+}
+
+.rf-mode-pan .react-flow__pane:active,
+.rf-mode-pan .react-flow__zoompane:active,
+.rf-mode-pan .react-flow__pane.dragging,
+.rf-mode-pan .react-flow__zoompane.dragging {
+  cursor: grabbing !important;
+}
+
+.rf-mode-select .react-flow__pane,
+.rf-mode-select .react-flow__zoompane {
+  cursor: crosshair !important;
+}

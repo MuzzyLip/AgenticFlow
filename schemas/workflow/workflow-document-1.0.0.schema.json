@@ -154,6 +154,24 @@
           "items": {
             "$ref": "#/$defs/portDefinition"
           }
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nodeIoDefinition"
+          }
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nodeIoDefinition"
+          }
+        },
+        "inputBindings": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/inputBinding"
+          }
         }
       }
     },
@@ -189,6 +207,199 @@
         },
         "target": {
           "$ref": "#/$defs/edgeEndpoint"
+        },
+        "branch": {
+          "$ref": "#/$defs/edgeBranch"
+        }
+      }
+    },
+    "inputBinding": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["source", "value"],
+          "additionalProperties": false,
+          "properties": {
+            "source": {
+              "const": "const"
+            },
+            "value": {}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["source", "value"],
+          "additionalProperties": false,
+          "properties": {
+            "source": {
+              "const": "ref"
+            },
+            "value": {
+              "type": "object",
+              "required": ["nodeId", "outputId"],
+              "additionalProperties": false,
+              "properties": {
+                "nodeId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "outputId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "path": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["source", "value"],
+          "additionalProperties": false,
+          "properties": {
+            "source": {
+              "const": "context"
+            },
+            "value": {
+              "type": "object",
+              "required": ["key"],
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "path": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "nodeIoDefinition": {
+      "type": "object",
+      "required": ["id", "label", "valueType"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "valueType": {
+          "enum": [
+            "control",
+            "text",
+            "number",
+            "boolean",
+            "json",
+            "array",
+            "object",
+            "any"
+          ]
+        },
+        "fieldType": {
+          "enum": [
+            "text",
+            "paragraph",
+            "select",
+            "number",
+            "checkbox",
+            "single_file",
+            "multi_file",
+            "json"
+          ]
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "maxLength": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        },
+        "step": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["label", "value"],
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "acceptedFileTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "maxFileSizeMb": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "maxFiles": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "defaultValue": {},
+        "description": {
+          "type": "string"
+        },
+        "schema": {
+          "type": "object"
+        }
+      }
+    },
+    "edgeBranch": {
+      "type": "object",
+      "required": ["kind"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": ["default", "condition", "error"]
+        },
+        "label": {
+          "type": "string"
+        },
+        "isFallback": {
+          "type": "boolean"
+        },
+        "condition": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "expression": {
+              "type": "string"
+            },
+            "expected": {
+              "type": ["string", "number", "boolean"]
+            }
+          }
         }
       }
     }
