@@ -27,9 +27,7 @@ export function StudioAgentEditor({ agentId }: StudioAgentEditorProps) {
       className="relative flex min-h-0 min-w-0 flex-1 flex-col"
       data-agent-id={agentId}
     >
-      <WorkspaceHeader
-        onBack={() => router.push(lp(studioRoutes.workspace))}
-      />
+      <WorkspaceHeader onBack={() => router.push(lp(studioRoutes.workspace))} />
       <div className="relative flex min-h-0 flex-1">
         <WorkspaceCanvas />
         <WorkspaceInspector />

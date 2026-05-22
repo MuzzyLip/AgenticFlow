@@ -1,128 +1,357 @@
-"use client";
+import { canvasNodes, canvasEdges } from "@/utils";
+import { workflowNodeRegistry } from "@/utils/studio";
+import { IconNode } from "./component/icon-node";
+import { NodePalette } from "./component/node-palette";
+import type { WorkflowNodeIcon } from "@/types";
+import {
+  addEdge,
+  Background,
+  ConnectionLineType,
+  Connection,
+  Controls,
+  type Node,
+  type ReactFlowInstance,
+  MiniMap,
+  ReactFlow,
+  useEdgesState,
+  useNodesState,
+} from "@xyflow/react";
+import { Bot, Cpu, Database, Globe, MessageSquare } from "lucide-react";
+import {
+  type MouseEvent as ReactMouseEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import type { IconNodeData } from "./component/icon-node";
 
-import { motion } from "motion/react";
-import { MousePointer2, Plus } from "lucide-react";
-
-import { useI18n } from "@/hooks";
-import { canvasNodes } from "@/utils/studio";
+const WORKFLOW_NODE_DND_MIME = "application/x-agentic-flow-node-type";
+const FALLBACK_NODE_COLOR = "bg-slate-600";
+const FALLBACK_NODE_ICON = "database";
+const PREVIEW_ICONS = {
+  message: MessageSquare,
+  bot: Bot,
+  globe: Globe,
+  database: Database,
+  cpu: Cpu,
+} as const satisfies Record<
+  WorkflowNodeIcon,
+  React.ComponentType<{ size?: number; className?: string }>
+>;
 
 export function WorkspaceCanvas() {
-  const { t } = useI18n();
-  const inspector = t.studio.editor.inspector;
+  const [nodes, setNodes, onNodesChange] = useNodesState(canvasNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(canvasEdges);
+  const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance<
+    Node<IconNodeData, "iconNode">
+  > | null>(null);
+  const [pendingPlacementType, setPendingPlacementType] = useState<
+    string | null
+  >(null);
+  const [cursorPosition, setCursorPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+  const canvasWrapperRef = useRef<HTMLDivElement | null>(null);
+
+  const onConnect = useCallback(
+    (connection: Connection) => {
+      setEdges((prev) =>
+        addEdge(
+          {
+            ...connection,
+            animated: false,
+          },
+          prev,
+        ),
+      );
+    },
+    [setEdges],
+  );
+
+  const handleDragStart = useCallback(
+    (event: React.DragEvent<HTMLButtonElement>, nodeType: string) => {
+      event.dataTransfer.setData(WORKFLOW_NODE_DND_MIME, nodeType);
+      event.dataTransfer.effectAllowed = "move";
+    },
+    [],
+  );
+
+  const handleDragOver = useCallback(
+    (event: React.DragEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = "move";
+    },
+    [],
+  );
+
+  const appendNodeToCanvas = useCallback(
+    ({
+      nodeType,
+      screenX,
+      screenY,
+    }: {
+      nodeType: string;
+      screenX: number;
+      screenY: number;
+    }) => {
+      if (!reactFlowInstance) {
+        return false;
+      }
+
+      const definition = workflowNodeRegistry.get(nodeType);
+      if (!definition) {
+        return false;
+      }
+
+      const position = reactFlowInstance.screenToFlowPosition({
+        x: screenX,
+        y: screenY,
+      });
+      setNodes((previousNodes) => {
+        const sequence =
+          previousNodes.filter((node) => node.id.startsWith(`${nodeType}_`))
+            .length + 1;
+        const nodeId = `${nodeType}_${Date.now()}_${sequence}`;
+        const nodeInstance = workflowNodeRegistry.createNodeInstance({
+          id: nodeId,
+          type: nodeType,
+          label: `${definition.displayName} ${sequence}`,
+          position,
+        });
+        const nodeColor = definition.uiMeta.color ?? FALLBACK_NODE_COLOR;
+        const nodeIcon = definition.uiMeta.icon ?? FALLBACK_NODE_ICON;
+
+        return [
+          ...previousNodes,
+          {
+            id: nodeInstance.id,
+            type: "iconNode" as const,
+            position: nodeInstance.position,
+            data: {
+              label: nodeInstance.label,
+              icon: nodeIcon,
+              color: nodeColor,
+            },
+          },
+        ];
+      });
+
+      return true;
+    },
+    [reactFlowInstance, setNodes],
+  );
+
+  const handleDrop = useCallback(
+    (event: React.DragEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      const droppedNodeType = event.dataTransfer.getData(
+        WORKFLOW_NODE_DND_MIME,
+      );
+      if (!droppedNodeType) {
+        return;
+      }
+
+      const created = appendNodeToCanvas({
+        nodeType: droppedNodeType,
+        screenX: event.clientX,
+        screenY: event.clientY,
+      });
+
+      if (created) {
+        setPendingPlacementType(null);
+        setCursorPosition(null);
+      }
+    },
+    [appendNodeToCanvas],
+  );
+
+  const handleSelectNodeType = useCallback((nodeType: string) => {
+    setPendingPlacementType(nodeType);
+  }, []);
+
+  const handlePaneMouseMove = useCallback(
+    (event: ReactMouseEvent) => {
+      if (!pendingPlacementType) {
+        return;
+      }
+
+      const wrapper = canvasWrapperRef.current;
+      if (!wrapper) {
+        return;
+      }
+
+      const rect = wrapper.getBoundingClientRect();
+      setCursorPosition({
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top,
+      });
+    },
+    [pendingPlacementType],
+  );
+
+  const handlePaneClick = useCallback(
+    (event: ReactMouseEvent) => {
+      if (!pendingPlacementType) {
+        return;
+      }
+
+      const created = appendNodeToCanvas({
+        nodeType: pendingPlacementType,
+        screenX: event.clientX,
+        screenY: event.clientY,
+      });
+
+      if (created) {
+        setPendingPlacementType(null);
+        setCursorPosition(null);
+      }
+    },
+    [appendNodeToCanvas, pendingPlacementType],
+  );
+
+  const handlePaneMouseLeave = useCallback(() => {
+    if (!pendingPlacementType) {
+      return;
+    }
+    setCursorPosition(null);
+  }, [pendingPlacementType]);
+
+  const deleteSelectedElements = useCallback(() => {
+    const selectedNodeIds = new Set(
+      nodes.filter((node) => node.selected).map((node) => node.id),
+    );
+    const hasSelectedEdges = edges.some((edge) => edge.selected);
+    if (selectedNodeIds.size === 0 && !hasSelectedEdges) {
+      return;
+    }
+
+    setNodes((previousNodes) =>
+      previousNodes.filter((node) => !selectedNodeIds.has(node.id)),
+    );
+    setEdges((previousEdges) =>
+      previousEdges.filter(
+        (edge) =>
+          !selectedNodeIds.has(edge.source) &&
+          !selectedNodeIds.has(edge.target) &&
+          !edge.selected,
+      ),
+    );
+  }, [edges, nodes, setEdges, setNodes]);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      const tagName = target?.tagName;
+      const isFormField =
+        tagName === "INPUT" ||
+        tagName === "TEXTAREA" ||
+        tagName === "SELECT" ||
+        target?.isContentEditable;
+
+      if (isFormField) {
+        return;
+      }
+
+      if (event.key === "Escape") {
+        setPendingPlacementType(null);
+        setCursorPosition(null);
+        return;
+      }
+
+      if (event.key === "Delete" || event.key === "Backspace") {
+        event.preventDefault();
+        deleteSelectedElements();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [deleteSelectedElements]);
+
+  const defaultEdgeOptions = useMemo(
+    () => ({
+      animated: false,
+    }),
+    [],
+  );
+  const nodeTypes = useMemo(() => ({ iconNode: IconNode }), []);
+  const nodeDefinitions = useMemo(() => workflowNodeRegistry.list(), []);
+  const pendingPlacementDefinition = useMemo(() => {
+    if (!pendingPlacementType) {
+      return null;
+    }
+
+    return workflowNodeRegistry.get(pendingPlacementType) ?? null;
+  }, [pendingPlacementType]);
+  const PreviewIcon = pendingPlacementDefinition
+    ? PREVIEW_ICONS[pendingPlacementDefinition.uiMeta.icon]
+    : null;
+  const previewColor =
+    pendingPlacementDefinition?.uiMeta.color ?? FALLBACK_NODE_COLOR;
 
   return (
-    <div className="relative flex-1 overflow-hidden bg-gray-50 select-none">
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: "radial-gradient(#000 1px, transparent 0)",
-          backgroundSize: "32px 32px",
-        }}
-        aria-hidden
-      />
-
-      <svg className="pointer-events-none absolute inset-0 h-full w-full">
-        <defs>
-          <marker
-            id="studio-arrowhead"
-            markerWidth="10"
-            markerHeight="7"
-            refX="9"
-            refY="3.5"
-            orient="auto"
-          >
-            <polygon points="0 0, 10 3.5, 0 7" fill="#E5E7EB" />
-          </marker>
-        </defs>
-        <path
-          d="M 136 178 L 300 178"
-          stroke="#E5E7EB"
-          strokeWidth="2"
-          fill="none"
-          markerEnd="url(#studio-arrowhead)"
-        />
-        <path
-          d="M 356 160 C 400 160, 420 88, 520 88"
-          stroke="#E5E7EB"
-          strokeWidth="2"
-          fill="none"
-          markerEnd="url(#studio-arrowhead)"
-        />
-        <path
-          d="M 356 195 C 400 195, 420 268, 520 268"
-          stroke="#E5E7EB"
-          strokeWidth="2"
-          fill="none"
-          markerEnd="url(#studio-arrowhead)"
-        />
-        <path
-          d="M 576 88 C 650 88, 680 160, 740 160"
-          stroke="#E5E7EB"
-          strokeWidth="2"
-          fill="none"
-          markerEnd="url(#studio-arrowhead)"
-        />
-        <path
-          d="M 576 268 C 650 268, 680 195, 740 195"
-          stroke="#E5E7EB"
-          strokeWidth="2"
-          fill="none"
-          markerEnd="url(#studio-arrowhead)"
-        />
-      </svg>
-
-      {canvasNodes.map((node) => (
-        <motion.div
-          key={node.id}
-          drag
-          dragMomentum={false}
-          style={{ left: node.x, top: node.y }}
-          className="group absolute cursor-grab active:cursor-grabbing"
+    <div
+      ref={canvasWrapperRef}
+      className="relative min-w-0 flex flex-1"
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
+    >
+      {pendingPlacementDefinition && cursorPosition && PreviewIcon ? (
+        <div
+          className="pointer-events-none absolute z-50 -translate-x-1/2 -translate-y-1/2 opacity-90"
+          style={{ left: cursorPosition.x, top: cursorPosition.y }}
         >
-          <div className="w-48 overflow-hidden rounded-xl border-2 border-gray-200 bg-white shadow-sm transition-all group-hover:border-black/20 group-hover:shadow-md">
-            <div className="flex items-center justify-between border-b border-gray-100 px-3 py-2">
-              <div className="flex items-center gap-2">
-                <div className={`rounded-md p-1 ${node.color}`}>
-                  <node.icon className="h-3.5 w-3.5 text-white" />
-                </div>
-                <span className="text-[10px] font-bold tracking-tight text-gray-400 uppercase">
-                  {node.type}
-                </span>
+          <div className="rounded-xl border bg-white px-3 py-2 shadow-sm">
+            <div className="flex items-center gap-2">
+              <div className={`rounded-xl p-3 text-white ${previewColor}`}>
+                <PreviewIcon size={16} />
               </div>
-              <div className="h-1.5 w-1.5 rounded-full bg-green-500 shadow-sm shadow-green-500/50" />
+              <span className="text-sm font-medium text-slate-900">
+                {pendingPlacementDefinition.displayName}
+              </span>
             </div>
-            <div className="p-3">
-              <h4 className="mb-1 text-xs font-bold text-gray-900">{node.label}</h4>
-              <p className="line-clamp-1 text-[10px] text-gray-500">
-                {inspector.nodeDescription}
-              </p>
-            </div>
-            <div className="absolute top-1/2 -left-1.5 h-3 w-3 -translate-y-1/2 rounded-full border-2 border-gray-200 bg-white transition-colors group-hover:border-gray-400" />
-            <div className="absolute top-1/2 -right-1.5 h-3 w-3 -translate-y-1/2 rounded-full border-2 border-gray-200 bg-white transition-colors group-hover:border-gray-400" />
           </div>
-        </motion.div>
-      ))}
+        </div>
+      ) : null}
 
-      <div className="absolute bottom-6 left-6 flex items-center gap-2 rounded-lg border border-gray-200 bg-white p-1 shadow-sm">
-        <button
-          type="button"
-          className="rounded-md p-2 text-gray-500 hover:bg-gray-50"
-          aria-label="Add node"
-        >
-          <Plus className="h-4 w-4" />
-        </button>
-        <button
-          type="button"
-          className="rounded-md p-2 text-gray-500 hover:bg-gray-50"
-          aria-label="Select"
-        >
-          <MousePointer2 className="h-4 w-4" />
-        </button>
-        <div className="mx-1 h-4 w-px bg-gray-200" />
-        <span className="px-2 text-xs leading-none font-medium text-gray-400">
-          {t.studio.editor.canvas.zoom}
-        </span>
-      </div>
+      <ReactFlow
+        className="h-full w-full"
+        nodes={nodes}
+        edges={edges}
+        nodeTypes={nodeTypes}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        onInit={setReactFlowInstance}
+        fitView
+        panOnDrag
+        zoomOnScroll
+        zoomOnPinch
+        onPaneMouseMove={handlePaneMouseMove}
+        onPaneMouseLeave={handlePaneMouseLeave}
+        onPaneClick={handlePaneClick}
+        connectionLineType={ConnectionLineType.Bezier}
+        defaultEdgeOptions={defaultEdgeOptions}
+        elementsSelectable
+        nodesDraggable
+        nodesConnectable
+        deleteKeyCode={null}
+        style={{ backgroundColor: "#F2F3F4" }}
+      >
+        <NodePalette
+          definitions={nodeDefinitions}
+          onDragStart={handleDragStart}
+          onSelectNodeType={handleSelectNodeType}
+        />
+        <MiniMap />
+        <Controls />
+        <Background gap={50} size={2} />
+      </ReactFlow>
     </div>
   );
 }

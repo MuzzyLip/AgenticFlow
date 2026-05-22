@@ -14,9 +14,22 @@ export function useDismissable(
   useEffect(() => {
     if (!enabled) return;
 
-    const handlePointerDown = (event: MouseEvent) => {
-      const target = event.target as Node;
-      if (ref.current?.contains(target)) return;
+    const handlePointerDown = (event: PointerEvent) => {
+      const current = ref.current;
+      if (!current) {
+        return;
+      }
+
+      const path = event.composedPath();
+      if (path.includes(current)) {
+        return;
+      }
+
+      const target = event.target;
+      if (target instanceof Node && current.contains(target)) {
+        return;
+      }
+
       onDismiss();
     };
 
@@ -26,11 +39,11 @@ export function useDismissable(
       }
     };
 
-    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("pointerdown", handlePointerDown, true);
     document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("pointerdown", handlePointerDown, true);
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [enabled, onDismiss, ref]);

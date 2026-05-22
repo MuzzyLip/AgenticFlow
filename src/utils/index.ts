@@ -34,5 +34,18 @@ export {
   exploreCategories,
   knowledgeDatasets,
   studioPlugins,
+  canvasWorkflowDocument,
   canvasNodes,
+  canvasEdges,
+  BASE_WORKFLOW_NODE_DEFINITIONS,
+  StaticWorkflowNodeRegistry,
+  workflowNodeRegistry,
+  buildWorkflowNodeDefinitionKey,
+  workflowDocumentDslSchema,
+  createEmptyWorkflowDocument,
+  createMockWorkflowDocument,
+} from "./studio";
+export type {
+  WorkflowNodeDefinitionKey,
+  CreateWorkflowNodeInstanceOptions,
 } from "./studio";
